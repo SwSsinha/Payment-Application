@@ -52,7 +52,7 @@ function User({user}) {
             </div>
             <div>
                 <div>
-                    {user.firstName}{user.lastName}
+                    {user.firstName} {user.lastName}
                 </div>
             </div>
         </div>

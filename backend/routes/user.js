@@ -89,6 +89,11 @@ router.post("/signin" , async (req,res) => {
         },JWT_SECRET);
         res.json({
             token : token,
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                _id: user._id
+            },
             message : "User Signed in successfully!"
         })
         return;
