@@ -52,7 +52,7 @@ export const Appbar = () => {
         onClick={toggleDarkMode}
         className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white hover:opacity-80 transition-colors duration-300"
       >
-        {isDark ? "Light Mode" : "Dark Mode"}
+        {isDark ? "Dark Mode" : "Light Mode"}
       </button>
       <div className="flex">
         <div className="flex flex-col justify-center h-full mr-4">

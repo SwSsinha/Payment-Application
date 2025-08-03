@@ -52,7 +52,7 @@ export const SendMoney = () => {
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-900 dark:text-white" htmlFor="amount">
-                                    Amount (in Rs)
+                                    Enter the Amount (in Rs)
                                 </label>
                                 <input onChange={(e) => {
                                     setAmount(e.target.value);
