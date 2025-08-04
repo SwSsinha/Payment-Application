@@ -46,11 +46,41 @@ const accountSchema = new mongoose.Schema({
         type: Number,
     }
 
-})
-const Account = mongoose.model('Account' , accountSchema)
+});
+const transactionSchema = new mongoose.Schema({
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    receiver: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true,
+        min: 0.01
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    description: {
+        type: String,
+        trim: true,
+        maxlength: 100
+    }
+});
+
+
+const Account = mongoose.model('Account' , accountSchema);
 const User = mongoose.model('User' , userSchema);
+const Transaction = mongoose.model('Transactions' , transactionSchema);
 
 module.exports = {
     User,
     Account,
+    Transaction
 }

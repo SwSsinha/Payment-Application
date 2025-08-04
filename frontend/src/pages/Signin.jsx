@@ -27,9 +27,10 @@ export const Signin = () => {
             
             // --- CRITICAL FIX: Correctly access the nested 'user' object from the response ---
             const userData = {
-                firstName: response.data.user.firstName,
-                lastName: response.data.user.lastName,
-                username: response.data.user.username,
+              _id: response.data.user._id,
+              firstName: response.data.user.firstName,
+              lastName: response.data.user.lastName,
+              username: response.data.user.username,
             };
             
             localStorage.setItem("user", JSON.stringify(userData));

@@ -2,12 +2,11 @@
 const express = require('express');
 const mongoose = require('mongoose'); // Import Mongoose for transactions
 const { authMiddleware } = require('../middleware');
-const { Account } = require('../db');
+const { Account, Transaction } = require('../db'); // <-- FIX: Changed 'Transactions' to 'Transaction'
 
 const router = express.Router();
 
 // --- GET BALANCE ENDPOINT ---
-
 router.get("/balance", authMiddleware, async (req, res) => {
     try {
         const account = await Account.findOne({
@@ -31,33 +30,27 @@ router.get("/balance", authMiddleware, async (req, res) => {
     }
 });
 
-// --- TRANSFER ENDPOINT ---
-// Use Mongoose transactions to ensure atomicity for financial transfers.
+// --- TRANSFER ENDPOINT with Transaction Logging ---
 router.post("/transfer", authMiddleware, async (req, res) => {
-    // Start a transaction session to wrap multiple database operations
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-        const { amount, to } = req.body;
+        const { amount, to, description } = req.body;
 
-        // Find the sender's account within the transaction
         const senderAccount = await Account.findOne({ userId: req.userId }).session(session);
 
-        // Check if sender has enough balance
         if (!senderAccount || senderAccount.balance < amount) {
-            await session.abortTransaction(); // Abort if validation fails
+            await session.abortTransaction();
             return res.status(400).json({
                 message: "Insufficient balance or invalid sender account"
             });
         }
 
-        // Find the recipient's account within the transaction
         const toAccount = await Account.findOne({ userId: to }).session(session);
 
-        // Check if recipient account exists
         if (!toAccount) {
-            await session.abortTransaction(); // Abort if validation fails
+            await session.abortTransaction();
             return res.status(400).json({
                 message: "Invalid recipient account"
             });
@@ -67,33 +60,62 @@ router.post("/transfer", authMiddleware, async (req, res) => {
         await Account.updateOne(
             { userId: req.userId }, 
             { $inc: { balance: -amount } },
-            { session: session } // Pass the session
+            { session: session }
         );
         
         await Account.updateOne(
-            { userId: to }, 
+            { userId: to },
             { $inc: { balance: amount } },
-            { session: session } // Pass the session
+            { session: session }
         );
 
-        // Commit the transaction
+        // Create a transaction history entry
+        await Transaction.create([{ // <-- FIX: Changed 'Transactions.create' to 'Transaction.create'
+            sender: req.userId,
+            receiver: to,
+            amount: amount,
+            date: new Date(),
+            description: description || null
+        }], { session: session });
+
         await session.commitTransaction();
 
-        // Send a success message back to the frontend
         res.json({
             message: "Transfer successful"
         });
 
     } catch (error) {
-        // If an error occurs, abort the transaction to roll back all changes
         await session.abortTransaction();
         console.error("Transfer failed:", error);
         res.status(500).json({
             message: "An error occurred during the transfer"
         });
     } finally {
-        // End the session
         session.endSession();
+    }
+});
+
+// --- GET Transaction History Endpoint ---
+router.get("/transactions", authMiddleware, async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const transactions = await Transaction.find({
+            $or: [{ sender: userId }, { receiver: userId }]
+        })
+        .sort({ date: -1 })
+        .populate('sender', 'firstName lastName')
+        .populate('receiver', 'firstName lastName');
+
+        res.status(200).json({
+            transactions: transactions
+        });
+
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+        res.status(500).json({
+            message: "Could not retrieve transaction history."
+        });
     }
 });
 

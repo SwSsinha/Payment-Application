@@ -42,6 +42,7 @@ export const Signup = () => {
                 });
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("user", JSON.stringify({
+                  _id: response.data.user._id,
                   firstName:firstName,
                   lastName:lastName,
                   username:username

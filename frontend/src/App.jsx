@@ -8,6 +8,7 @@ import { Signin } from "./pages/Signin";
 import { Dashboard } from "./pages/Dashboard";
 import { SendMoney } from "./pages/SendMoney";
 import { Profile } from "./pages/Profile";
+import { TransactionHistory } from "./components/TransactionHistory";
 
 function App(){
   return (
@@ -20,6 +21,7 @@ function App(){
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/send" element={<SendMoney />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/transactions" element={<TransactionHistory />} />
 
         </Routes>
       </BrowserRouter>
