@@ -33,14 +33,25 @@ export const Signup = () => {
         }} placeholder="123456" label={"Password"} />
         <div className="pt-4">
           <Button onClick={async () => {
-            const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
-              username,
-              firstName,
-              lastName,
-              password
-            });
-            localStorage.setItem("token", response.data.token)
-            navigate("/signin")
+            try {
+                const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+                  username,
+                  firstName,
+                  lastName,
+                  password
+                });
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("user", JSON.stringify({
+                  firstName:firstName,
+                  lastName:lastName,
+                  username:username
+                }))
+                // Navigate to dashboard after successful signup
+                navigate("/dashboard")
+            } catch (error) {
+                console.error("Signup failed:", error);
+                alert("Signup failed. Please try again with different credentials.");
+            }
           }} label={"Sign up"} />
         </div>
         <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />

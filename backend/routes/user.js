@@ -26,7 +26,7 @@ const updateBody = zod.object({
 })
 
 router.post("/signup", async(req,res) => {
-    const {  success } = signupBody.safeParse(req.body)
+    const { success } = signupBody.safeParse(req.body)
     if (!success){
         return res.status(411).json({
             message : "Invalid inputs!"
@@ -63,9 +63,15 @@ router.post("/signup", async(req,res) => {
 
     res.json({
         message : "User created successfully!",
-        token : token
+        token : token,
+        user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username
+        }
     })
 })
+
 router.post("/signin" , async (req,res) => {
     const { success } = signinBody.safeParse(req.body)
     if(!success){
@@ -92,6 +98,7 @@ router.post("/signin" , async (req,res) => {
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
+                username: user.username,
                 _id: user._id
             },
             message : "User Signed in successfully!"
@@ -102,18 +109,37 @@ router.post("/signin" , async (req,res) => {
         message : "Error while logging in: Invalid Password!"
     })
 })
-router.put("/update", authMiddleware , async (req,res) => {
+router.put("/update", authMiddleware, async (req, res) => {
+    // Validate the incoming request body
     const { success } = updateBody.safeParse(req.body);
-    if(!success){
+    if (!success) {
         return res.status(411).json({
-            message: "Please give inputs in correct formate in order to update the data!"
-        })
+            message: "Please give inputs in correct format in order to update the data!"
+        });
     }
-    await User.updateOne({_id:req.userId},req.body);
+    
+    // Find the user by ID and update the document.
+    // The { new: true } option ensures we get the updated document back.
+    const updatedUser = await User.findByIdAndUpdate(req.userId, req.body, { new: true });
+    
+    // Check if the user was found and updated successfully.
+    if (!updatedUser) {
+        return res.status(404).json({
+            message: "User not found."
+        });
+    }
+
+    // Send back the updated user data in the response.
     res.json({
-        message:"Updated successfully!"
-    })
-})
+        message: "Updated successfully!",
+        updatedUser: {
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            username: updatedUser.username
+        }
+    });
+});
+
 router.get("/bulk", authMiddleware , async (req,res) => {
     const filter = req.query.filter ||"";
     const users = await User.find({
