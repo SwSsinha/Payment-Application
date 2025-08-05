@@ -9,13 +9,14 @@ import { Dashboard } from "./pages/Dashboard";
 import { SendMoney } from "./pages/SendMoney";
 import { Profile } from "./pages/Profile";
 import { TransactionHistory } from "./components/TransactionHistory";
+import { LandingPage } from "./pages/LandingPage";
 
 function App(){
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/dashboard" element={<Dashboard />} />
