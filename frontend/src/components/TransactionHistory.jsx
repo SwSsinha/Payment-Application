@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Appbar } from "../components/Appbar"; // Adjust the path as needed
 import { useNavigate } from "react-router-dom";
+import { Loader } from "./Loader";
 
 export const TransactionHistory = () => {
     const [transactions, setTransactions] = useState([]);
@@ -52,7 +53,7 @@ export const TransactionHistory = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
-                <div className="text-xl text-gray-500 dark:text-gray-400">Loading transactions...</div>
+                <div className="text-xl text-gray-500 dark:text-gray-400"><Loader/></div>
             </div>
         );
     }

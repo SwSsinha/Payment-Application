@@ -1,5 +1,6 @@
 import { Appbar } from "../components/Appbar";
 import { Balance } from "../components/Balance";
+import { Footer } from "../components/Footer";
 import { Users } from "../components/Users";
 
 export const Dashboard = () => {
@@ -9,5 +10,6 @@ export const Dashboard = () => {
             <Balance/>
             <Users />
         </div>
+        <Footer/>
     </div>
 }
