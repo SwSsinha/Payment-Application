@@ -46,7 +46,7 @@ export const Appbar = () => {
 
     return (
         <div className="shadow h-14 flex justify-between">
-            <div className="flex flex-col justify-center h-full ml-4">
+            <div className="flex flex-col justify-center h-full ml-4 dark:text-white">
                 PayU App
             </div>
             <button
@@ -56,7 +56,7 @@ export const Appbar = () => {
                 {isDark ? "Dark Mode" : "Light Mode"}
             </button>
             <div className="flex">
-                <div className="flex flex-col justify-center h-full mr-4">
+                <div className="flex flex-col justify-center h-full mr-4 dark:text-white">
                     Hey, {user.firstName || "there"}
                 </div>
                 <div className="relative">
