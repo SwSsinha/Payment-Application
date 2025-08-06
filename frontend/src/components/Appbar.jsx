@@ -11,7 +11,7 @@ export const Appbar = () => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/signin");
+        navigate("/");
     };
 
     useEffect(() => {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const LandingPage = () => {
     return (
         // Main container with a dark background and light text
-        <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center py-12 px-4 transition-colors duration-300">
+        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center py-12 px-4 transition-colors duration-300">
             <div className="max-w-4xl w-full text-center">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
                     Welcome to <span className="text-orange-500 dark:text-orange-400">PayU App</span>
@@ -18,12 +18,11 @@ export const LandingPage = () => {
                         Sign Up
                     </Link>
                     {/* Sign In button with a dark background and orange border */}
-                    <Link to="/signin" className="w-full sm:w-auto px-8 py-3 text-lg font-semibold text-orange-500 bg-gray-800 border-2 border-orange-500 rounded-md shadow-lg hover:bg-gray-700 transition-colors duration-300 transform hover:scale-105">
+                    <Link to="/signin" className="w-full sm:w-auto px-8 py-3 text-lg font-semibold text-orange-500 bg-black border-2 border-orange-500 rounded-md shadow-lg hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
                         Sign In
                     </Link>
                 </div>
             </div>
-            
             {/* Feature Section */}
             <div className="mt-20 max-w-4xl w-full">
                 <h2 className="text-3xl font-bold text-center mb-10 text-white">Why Choose Us?</h2>
